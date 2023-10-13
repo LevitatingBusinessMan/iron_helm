@@ -1,5 +1,6 @@
 use super::*;
 
+#[derive(Debug)]
 pub struct WoodenStaff;
 impl Card for WoodenStaff {
     fn type_(&self) -> CardType {
@@ -11,7 +12,7 @@ impl Card for WoodenStaff {
 }
 impl Ownable for WoodenStaff {}
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug)]
 pub enum Trappings {
     WoodenStaff
 }
