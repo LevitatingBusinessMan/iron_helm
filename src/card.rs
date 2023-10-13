@@ -21,6 +21,8 @@ pub enum CardIdent {
 }
 
 /// Generic Card trait
+// https://stackoverflow.com/a/30275713/8935250
+// https://github.com/rust-lang/rust/issues/31844
 pub trait Card: std::fmt::Debug {
     fn type_(&self) -> CardIdent;
     fn front(&self) -> &'static str;

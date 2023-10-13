@@ -1,14 +1,16 @@
 #![feature(return_position_impl_trait_in_trait)]
-use card::Ownable;
 
 pub mod card;
+use card::*;
 
 #[derive(Debug)]
 pub struct GameState {
     pub inventory: Vec<&'static dyn Ownable>,
+    pub skills: Vec<&'static dyn skills::Skill>,
     pub poison: u8,
     pub health: u8,
     pub energy: u8,
+    pub character: &'static dyn characters::CharacterCard,
 }
 
 impl GameState {
@@ -23,11 +25,13 @@ impl GameState {
 fn main() {
     let mut state = GameState {
         inventory: vec![],
+        skills: vec![],
         poison: 0,
         health: 10,
         energy: 10,
+        character: &characters::Sortab{},
     };
-    state.inventory.push(&card::trappings::WoodenStaff{});
+    state.character.apply(&mut state);
     println!("Do I have a wooden staff? {}", state.inventory.first().unwrap().type_() == card::CardIdent::Trappings(card::Trappings::WoodenStaff));
     let card = card::dungeon::draw();
     println!("Received card {:?}", card);

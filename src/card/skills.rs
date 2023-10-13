@@ -13,7 +13,7 @@ impl Card for Alchemy {
 impl Skill for Alchemy {}
 
 /// Skill marker trait
-pub trait Skill {}
+pub trait Skill: Card {}
 
 #[derive(PartialEq, Debug)]
 pub enum Skills {
