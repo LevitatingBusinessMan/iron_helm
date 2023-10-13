@@ -4,10 +4,10 @@ set -x
 set -e
 mkdir -p images
 # Extract image
-#pdfimages -all Iron\ Helm\ PNP_*.pdf images/iron_helm
+pdfimages -all Iron\ Helm\ PNP_*.pdf images/iron_helm
 # Remove smasks
 #rm images/iron_helm-[0-9][0-9][13579].jpg
-#pdfimages -list Iron\ Helm\ PNP_022920.pdf | grep smask | column -t | awk '{print $2}' | xargs -I '{n}' printf '%03d\n' {n} | xargs -I '{n}' rm images/iron_helm-{n}.jpg
+pdfimages -list Iron\ Helm\ PNP_022920.pdf | grep smask | column -t | awk '{print $2}' | xargs -I '{n}' printf '%03d\n' {n} | xargs -I '{n}' rm images/iron_helm-{n}.jpg
 
 ls images/*.png | sed s/.png// | xargs -I "{f}" convert {f}.png {f}.jpg
 
@@ -168,7 +168,7 @@ popd
 
 ### SKILLS
 mkdir -p skills
-pushd plots
+pushd skills
 cp ../iron_helm-368.jpg berserk.jpg
 cp ../iron_helm-370.jpg conceal.jpg
 cp ../iron_helm-372.jpg divinity.jpg

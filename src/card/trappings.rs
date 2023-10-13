@@ -10,7 +10,11 @@ impl Card for WoodenStaff {
         "wooden_staff.jpg"
     }
 }
-impl Ownable for WoodenStaff {}
+impl Ownable for WoodenStaff {
+    fn price(&'static self) -> u8 {3}
+    fn weight(&'static self) -> u8 {1}
+    fn location(&'static self) -> EquipLocation {EquipLocation::TwoHanded}
+}
 
 #[derive(Debug)]
 pub struct DoorWedge;
@@ -22,7 +26,11 @@ impl Card for DoorWedge {
         "door_wedge.jpg"
     }
 }
-impl Ownable for DoorWedge {}
+impl Ownable for DoorWedge {
+    fn price(&'static self) -> u8 {1}
+    fn weight(&'static self) -> u8 {1}
+    fn location(&'static self) -> EquipLocation {EquipLocation::Accessory}
+}
 
 #[derive(PartialEq, Debug)]
 pub enum Trappings {

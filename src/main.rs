@@ -10,6 +10,8 @@ pub struct GameState {
     pub poison: u8,
     pub health: u8,
     pub energy: u8,
+    pub rations: u8,
+    pub wealth: u8,
     pub character: &'static dyn characters::CharacterCard,
 }
 
@@ -20,6 +22,9 @@ impl GameState {
     pub fn increase_energy(&mut self, n: u8) {
         self.energy += n;
     }
+    pub fn increase_health(&mut self, n: u8) {
+        self.health += n;
+    }
 }
 
 fn main() {
@@ -27,8 +32,10 @@ fn main() {
         inventory: vec![],
         skills: vec![],
         poison: 0,
-        health: 10,
-        energy: 10,
+        health: 0,
+        energy: 0,
+        rations: 0,
+        wealth: 0,
         character: &characters::Sortab{},
     };
     state.character.apply(&mut state);

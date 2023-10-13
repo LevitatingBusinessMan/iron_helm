@@ -8,6 +8,8 @@ pub mod skills;
 pub use skills::Skills;
 pub mod loot;
 pub use loot::Loot;
+pub mod potions;
+pub use potions::Potions;
 
 #[derive(PartialEq, Debug)]
 /// Basically an index of all cards,
@@ -18,6 +20,7 @@ pub enum CardIdent {
     Characters(Characters),
     Skills(Skills),
     Loot(Loot),
+    Potions(Potions),
 }
 
 /// Generic Card trait
@@ -33,14 +36,28 @@ pub trait Card: std::fmt::Debug {
             CardIdent::Skills(_) => "skills.jpg",
             CardIdent::Characters(_) => "characters.jpg",
             CardIdent::Loot(_) => "loot.jpg",
+            CardIdent::Potions(_) => "potions.jpg",
         }
     }
     fn ownable(&self) -> Option<&'static dyn Ownable> {None}
     fn consumable(&'static self) -> Option<&'static dyn Consumable> {None}
 }
 
+pub enum EquipLocation {
+    PrimaryHand,
+    OffHand,
+    TwoHanded,
+    Head,
+    Body,
+    Accessory,
+}
+
 /// Marker trait for ownable cards
-pub trait Ownable: Card {}
+pub trait Ownable: Card {
+    fn price(&'static self) -> u8;
+    fn weight(&'static self) -> u8;
+    fn location(&'static self) -> EquipLocation;
+}
 
 /// Marker trait for consumables
 pub trait Consumable: Ownable {
