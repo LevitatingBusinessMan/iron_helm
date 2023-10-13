@@ -3,8 +3,8 @@ use super::*;
 #[derive(Debug)]
 pub struct ArrowTrap;
 impl Card for ArrowTrap {
-    fn type_(&self) -> CardType {
-        CardType::Dungeon(Dungeon::ArrowTrap)
+    fn type_(&self) -> CardIdent {
+        CardIdent::Dungeon(Dungeon::ArrowTrap)
     }
     fn front(&self) -> &'static str {
         "arrow_trap.jpg"
@@ -27,6 +27,6 @@ pub trait DungeonCard: Card {
     fn resolve(&self, state: &mut crate::GameState, first_draw: bool);
 }
 
-pub fn draw() -> impl DungeonCard {
-    return ArrowTrap{};
+pub fn draw() -> &'static dyn DungeonCard {
+    return &ArrowTrap{};
 }
