@@ -25,11 +25,6 @@ pub trait Card: std::fmt::Debug {
 /// Marker trait for ownable cards
 pub trait Ownable: Card {}
 
-/// A dungeon card that has to be resolved
-pub trait DungeonCard: Card {
-    fn resolve(&self, state: &mut crate::GameState, first_draw: bool);
-}
-
 /// Marker trait for consumables
 pub trait Consumable: Ownable {
     fn consume(state: &mut crate::GameState) -> () {

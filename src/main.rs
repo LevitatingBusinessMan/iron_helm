@@ -1,4 +1,4 @@
-use crate::card::DungeonCard;
+use crate::card::dungeon::DungeonCard;
 
 pub mod card;
 

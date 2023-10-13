@@ -22,6 +22,11 @@ pub enum Dungeon {
     ArrowTrap
 }
 
+/// A dungeon card that has to be resolved
+pub trait DungeonCard: Card {
+    fn resolve(&self, state: &mut crate::GameState, first_draw: bool);
+}
+
 pub fn draw() -> impl DungeonCard {
     return ArrowTrap{};
 }
