@@ -11,8 +11,6 @@ pub use loot::Loot;
 pub mod potions;
 pub use potions::Potions;
 
-use self::dungeon::DungeonCard;
-
 #[derive(PartialEq, Debug)]
 /// Basically an index of all cards,
 /// used for identifying a card.
@@ -43,7 +41,6 @@ pub trait Card: std::fmt::Debug {
     }
     fn ownable(&'static self) -> Option<&'static dyn Ownable> {None}
     fn consumable(&'static self) -> Option<&'static dyn Consumable> {None}
-    fn dungeon_card(&'static self) -> Option<&'static dyn DungeonCard> {None}
 }
 
 pub enum EquipLocation {
@@ -112,7 +109,6 @@ macro_rules! card {
             fn front(&self) -> &'static str {
                 $f
             }
-            fn dungeon_card(&'static self) -> Option<&'static dyn DungeonCard> {Some(self)}
         }
     };
     ($c:ident, $t:ident, $f:literal skill) => {
