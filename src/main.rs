@@ -4,7 +4,7 @@
 
 #[macro_use]
 pub mod card;
-use card::{*, dungeon::DungeonCard};
+use card::*;
 
 #[derive(Debug)]
 pub struct GameState {
