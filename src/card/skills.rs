@@ -1,16 +1,7 @@
 use super::*;
+use crate::card;
 
-#[derive(Debug)]
-pub struct Alchemy;
-impl Card for Alchemy {
-    fn type_(&self) -> CardIdent {
-        CardIdent::Skills(Skills::Alchemy)
-    }
-    fn front(&self) -> &'static str {
-        "alchemy.jpg"
-    }
-}
-impl Skill for Alchemy {}
+card!(Alchemy, Skills, "alchemy.jpg" skill);
 
 /// Skill marker trait
 pub trait Skill: Card {}

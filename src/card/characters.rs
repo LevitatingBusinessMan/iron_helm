@@ -1,18 +1,8 @@
-use crate::GameState;
+use crate::{GameState, card};
 
 use super::*;
 
-#[derive(Debug)]
-pub struct Sortab;
-impl Card for Sortab {
-    fn type_(&self) -> CardIdent {
-        CardIdent::Characters(Characters::Sortab)
-    }
-    fn front(&self) -> &'static str {
-        "alchemy.jpg"
-    }
-}
-
+card!(Sortab,Characters, "sortab.jpg");
 impl CharacterCard for Sortab {
     fn trappings(&self) -> Vec<&'static dyn Ownable> {
         vec![&trappings::WoodenStaff{}, &trappings::DoorWedge{}]

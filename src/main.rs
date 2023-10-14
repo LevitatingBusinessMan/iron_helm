@@ -1,5 +1,6 @@
 #![feature(return_position_impl_trait_in_trait)]
 
+#[macro_use]
 pub mod card;
 use card::*;
 
@@ -50,5 +51,10 @@ fn main() {
         println!("Loot is consumable, consuming");
         loot.consume(&mut state);
         println!("New state: {:?}", state);
+    }
+    let potion = &card::potions::Health;
+    if let Some(potion) = potion.consumable() {
+        potion.consume(&mut state);
+        println!("Drank potion. New state: {:?}", state);
     }
 }

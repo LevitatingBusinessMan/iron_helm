@@ -1,16 +1,7 @@
 use super::*;
+use crate::card;
 
-#[derive(Debug)]
-pub struct ArrowTrap;
-impl Card for ArrowTrap {
-    fn type_(&self) -> CardIdent {
-        CardIdent::Dungeon(Dungeon::ArrowTrap)
-    }
-    fn front(&self) -> &'static str {
-        "arrow_trap.jpg"
-    }
-}
-
+card!(ArrowTrap, Dungeon, "arrow_trap.jpg" dungeon);
 impl DungeonCard for ArrowTrap {
     fn resolve(&self, state: &mut crate::GameState, first_draw: bool) {
         state.increase_poison(if first_draw {1} else {2});
