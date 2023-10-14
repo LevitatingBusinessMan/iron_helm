@@ -63,23 +63,44 @@ pub trait Ownable: Card {
     fn price(&'static self) -> u8;
     fn weight(&'static self) -> u8;
     fn location(&'static self) -> EquipLocation;
-    // fn equip(&'static self, state: &mut GameState) -> Result<(), &'static str> {
-    //     if let Some(i) = state.inventory.iter().position(|c| c.type_() == self.type_()) {
-    //         match self.location() {
-    //             PH => {
-    //                 if let Some(cur) = state.primary {
-    //                     state.inventory.push(cur);
-    //                 }
-    //                 state.primary = Some(self as &'static dyn Ownable);
-    //                 state.inventory.remove(i);
-    //                 Ok(())
-    //             }
-    //             AS => Err("This item is an accessory")
-    //         }
-    //     } else {
-    //         Err("Not in inventory")
-    //     }
-    // }
+    /// For use within the trait
+    /// See: https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=29127510ff5c3a4a8ed16d90575e3a20
+    fn as_trait(&'static self) -> &'static dyn Ownable;
+    fn equip(&'static self, state: &mut GameState) -> Result<(), &'static str> {
+        if let Some(i) = state.inventory.iter().position(|c| c.type_() == self.type_()) {
+            match self.location() {
+                EquipLocation::AS => Err("This item cannot be equipped"),
+                _ => {
+                    match self.location() {
+                        EquipLocation::PH => {
+                            if let Some(cur) = state.primary {
+                                state.inventory.push(cur);
+                                // compare primary hand and remove if the same
+                            }
+                            state.primary = Some(self.as_trait());
+                        }
+                        EquipLocation::OH => {
+                            if let Some(cur) = state.offhand {
+                                state.inventory.push(cur);
+                                // compare primary hand and remove if the same
+                            }
+                            state.offhand = Some(self.as_trait());
+                        },
+                        EquipLocation::TH => {
+                          todo!()  
+                        },
+                        EquipLocation::HD => todo!(),
+                        EquipLocation::BD => todo!(),
+                        EquipLocation::AS => unreachable!(),
+                    }
+                    state.inventory.remove(i);
+                    Ok(())
+                }
+            }
+        } else {
+            Err("This item is not in inventory")
+        }
+    }
 }
 
 /// Marker trait for consumables
@@ -107,6 +128,7 @@ macro_rules! card {
             fn price(&'static self) -> u8 {$p}
             fn weight(&'static self) -> u8 {$w}
             fn location(&'static self) -> EquipLocation {EquipLocation::$l}
+            fn as_trait(&'static self) -> &'static dyn Ownable {self}
         }
     };
     ($c:ident, $t:ident, $f:literal ($p:expr;$w:expr;$l:ident)) => {
@@ -125,6 +147,7 @@ macro_rules! card {
             fn price(&'static self) -> u8 {$p}
             fn weight(&'static self) -> u8 {$w}
             fn location(&'static self) -> EquipLocation {EquipLocation::$l}
+            fn as_trait(&'static self) -> &'static dyn Ownable {self}
         }
     };
     ($c:ident, $t:ident, $f:literal skill) => {
