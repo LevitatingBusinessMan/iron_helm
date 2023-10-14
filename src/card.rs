@@ -10,6 +10,8 @@ pub mod loot;
 pub use loot::Loot;
 pub mod potions;
 pub use potions::Potions;
+pub mod plots;
+pub use plots::Plots;
 
 #[derive(PartialEq, Debug)]
 /// Basically an index of all cards,
@@ -21,15 +23,16 @@ pub enum CardIdent {
     Skills(Skills),
     Loot(Loot),
     Potions(Potions),
+    Plots(Plots),
 }
 
 /// Generic Card trait
 // https://stackoverflow.com/a/30275713/8935250
 // https://github.com/rust-lang/rust/issues/31844
 pub trait Card: std::fmt::Debug {
-    fn type_(&self) -> CardIdent;
-    fn front(&self) -> &'static str;
-    fn back(&self) -> &'static str {
+    fn type_(&'static self) -> CardIdent;
+    fn front(&'static self) -> &'static str;
+    fn back(&'static self) -> &'static str {
         match self.type_() {
             CardIdent::Trappings(_) => "trappings.jpg",
             CardIdent::Dungeon(_) => "dungeon.jpg",
@@ -37,6 +40,7 @@ pub trait Card: std::fmt::Debug {
             CardIdent::Characters(_) => "characters.jpg",
             CardIdent::Loot(_) => "loot.jpg",
             CardIdent::Potions(_) => "potions.jpg",
+            CardIdent::Plots(_) => "plots.jpg",
         }
     }
     fn ownable(&'static self) -> Option<&'static dyn Ownable> {None}
@@ -66,10 +70,10 @@ macro_rules! card {
         #[derive(Debug)]
         pub struct $c;
         impl Card for $c {
-            fn type_(&self) -> CardIdent {
+            fn type_(&'static self) -> CardIdent {
                 CardIdent::$t($t::$c)
             }
-            fn front(&self) -> &'static str {
+            fn front(&'static self) -> &'static str {
                 $f
             }
             fn ownable(&'static self) -> Option<&'static dyn Ownable> {Some(self)}
@@ -85,10 +89,10 @@ macro_rules! card {
         #[derive(Debug)]
         pub struct $c;
         impl Card for $c {
-            fn type_(&self) -> CardIdent {
+            fn type_(&'static self) -> CardIdent {
                 CardIdent::$t($t::$c)
             }
-            fn front(&self) -> &'static str {
+            fn front(&'static self) -> &'static str {
                 $f
             }
             fn ownable(&'static self) -> Option<&'static dyn Ownable> {Some(self)}
@@ -103,10 +107,10 @@ macro_rules! card {
         #[derive(Debug)]
         pub struct $c;
         impl Card for $c {
-            fn type_(&self) -> CardIdent {
+            fn type_(&'static self) -> CardIdent {
                 CardIdent::$t($t::$c)
             }
-            fn front(&self) -> &'static str {
+            fn front(&'static self) -> &'static str {
                 $f
             }
         }
@@ -115,10 +119,10 @@ macro_rules! card {
         #[derive(Debug)]
         pub struct $c;
         impl Card for $c {
-            fn type_(&self) -> CardIdent {
+            fn type_(&'static self) -> CardIdent {
                 CardIdent::$t($t::$c)
             }
-            fn front(&self) -> &'static str {
+            fn front(&'static self) -> &'static str {
                 $f
             }
         }
@@ -128,10 +132,10 @@ macro_rules! card {
         #[derive(Debug)]
         pub struct $c;
         impl Card for $c {
-            fn type_(&self) -> CardIdent {
+            fn type_(&'static self) -> CardIdent {
                 CardIdent::$t($t::$c)
             }
-            fn front(&self) -> &'static str {
+            fn front(&'static self) -> &'static str {
                 $f
             }
         }
