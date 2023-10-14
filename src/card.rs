@@ -49,6 +49,7 @@ pub trait Card: std::fmt::Debug {
     fn consumable(&'static self) -> Option<&'static dyn Consumable> {None}
 }
 
+#[derive(PartialEq)]
 pub enum EquipLocation {
     PH,
     OH,
@@ -75,22 +76,42 @@ pub trait Ownable: Card {
                         EquipLocation::PH => {
                             if let Some(cur) = state.primary {
                                 state.inventory.push(cur);
-                                // compare primary hand and remove if the same
+                                if cur.location() == EquipLocation::TH {
+                                    state.offhand = None;
+                                }
                             }
-                            state.primary = Some(self.as_trait());
                         }
                         EquipLocation::OH => {
                             if let Some(cur) = state.offhand {
                                 state.inventory.push(cur);
-                                // compare primary hand and remove if the same
+                                if cur.location() == EquipLocation::TH {
+                                    state.primary = None;
+                                }
                             }
                             state.offhand = Some(self.as_trait());
                         },
                         EquipLocation::TH => {
-                          todo!()  
+                            if let Some(cur_prime) = state.primary {
+                                state.inventory.push(cur_prime);
+                                if let Some(cur_off) = state.offhand && cur_prime.location() != EquipLocation::TH {
+                                    state.inventory.push(cur_off);
+                                }
+                            }
+                            state.primary = Some(self.as_trait());
+                            state.offhand = Some(self.as_trait());
                         },
-                        EquipLocation::HD => todo!(),
-                        EquipLocation::BD => todo!(),
+                        EquipLocation::HD => {
+                            if let Some(cur) = state.head {
+                                state.inventory.push(cur);
+                            }
+                            state.head = Some(self.as_trait());
+                        },
+                        EquipLocation::BD => {
+                            if let Some(cur) = state.body {
+                                state.inventory.push(cur);
+                            }
+                            state.body = Some(self.as_trait());
+                        },
                         EquipLocation::AS => unreachable!(),
                     }
                     state.inventory.remove(i);

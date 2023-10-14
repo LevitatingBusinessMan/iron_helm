@@ -1,5 +1,6 @@
 #![feature(return_position_impl_trait_in_trait)]
 #![feature(associated_type_defaults)]
+#![feature(let_chains)]
 
 #[macro_use]
 pub mod card;
