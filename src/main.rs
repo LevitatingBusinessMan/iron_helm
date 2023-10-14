@@ -1,8 +1,9 @@
 #![feature(return_position_impl_trait_in_trait)]
+#![feature(associated_type_defaults)]
 
 #[macro_use]
 pub mod card;
-use card::*;
+use card::{*, dungeon::DungeonCard};
 
 #[derive(Debug)]
 pub struct GameState {
@@ -14,6 +15,10 @@ pub struct GameState {
     pub rations: u8,
     pub wealth: u8,
     pub character: &'static dyn characters::CharacterCard,
+    pub head: Option<&'static dyn Ownable>,
+    pub body: Option<&'static dyn Ownable>,
+    pub primary: Option<&'static dyn Ownable>,
+    pub offhand: Option<&'static dyn Ownable>,
 }
 
 impl GameState {
@@ -38,6 +43,10 @@ fn main() {
         rations: 0,
         wealth: 0,
         character: &characters::Sortab{},
+        head: None,
+        primary: None,
+        body: None,
+        offhand: None,
     };
     state.character.apply(&mut state);
     println!("Do I have a wooden staff? {}", state.inventory.first().unwrap().type_() == card::CardIdent::Trappings(card::Trappings::WoodenStaff));

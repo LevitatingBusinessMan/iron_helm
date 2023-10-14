@@ -1,23 +1,67 @@
 use super::*;
 use crate::card;
 
-card!(ArrowTrap, Dungeon, "arrow_trap.jpg" dungeon);
+card!(Altar, Dungeon, "altar.jpg");
+impl DungeonCard for Altar {}
+card!(Ambush, Dungeon, "ambush.jpg");
+impl DungeonCard for Ambush {}
+card!(ArrowTrap, Dungeon, "arrow_trap.jpg");
 impl DungeonCard for ArrowTrap {
     fn resolve(&self, state: &mut crate::GameState, first_draw: bool) {
         state.increase_poison(if first_draw {1} else {2});
     }
 }
+card!(Campsite, Dungeon, "campsite.jpg");
+impl DungeonCard for Campsite {}
+card!(Clearing, Dungeon, "clearing.jpg");
+impl DungeonCard for Clearing {}
+card!(Labyrinth, Dungeon, "labyrinth.jpg");
+impl DungeonCard for Labyrinth {}
+card!(Merchant, Dungeon, "merchant.jpg");
+impl DungeonCard for Merchant {}
+card!(MushroomGrove, Dungeon, "mushroom_grove.jpg");
+impl DungeonCard for MushroomGrove {}
+card!(Skirmish, Dungeon, "skirmish.jpg");
+impl DungeonCard for Skirmish {}
+card!(Treasure, Dungeon, "treasure.jpg");
+impl DungeonCard for Treasure {}
+
 
 #[derive(PartialEq, Debug)]
 pub enum Dungeon {
-    ArrowTrap
+    Altar,
+    Ambush, // 3 times
+    ArrowTrap,
+    Campsite,
+    Clearing,
+    Labyrinth,
+    Merchant,
+    MushroomGrove,
+    Skirmish, // 4 times
+    Treasure,
 }
 
 /// A dungeon card that has to be resolved
 pub trait DungeonCard: Card {
-    fn resolve(&self, state: &mut crate::GameState, first_draw: bool);
+    fn resolve(&self, state: &mut crate::GameState, first_draw: bool) {
+        unimplemented!()
+    }
 }
 
 pub fn draw() -> &'static dyn DungeonCard {
-    return &ArrowTrap{};
+    // 15 possible options
+    let r = rand::random::<u8>() % 15;
+    match r {
+        0 => &Altar{},
+        1..=3 => &Ambush{},
+        4 => &ArrowTrap{},
+        5 => &Campsite{},
+        6 => &Clearing{},
+        7 => &Labyrinth{},
+        8 => &Merchant{},
+        9 => &MushroomGrove{},
+        10..=13 => &Skirmish{},
+        14 => &Treasure{},
+        _ => unreachable!()
+    }
 }

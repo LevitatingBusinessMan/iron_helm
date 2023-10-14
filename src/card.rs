@@ -13,6 +13,8 @@ pub use potions::Potions;
 pub mod plots;
 pub use plots::Plots;
 
+use crate::GameState;
+
 #[derive(PartialEq, Debug)]
 /// Basically an index of all cards,
 /// used for identifying a card.
@@ -61,6 +63,28 @@ pub trait Ownable: Card {
     fn price(&'static self) -> u8;
     fn weight(&'static self) -> u8;
     fn location(&'static self) -> EquipLocation;
+    // fn equip(&'static self, state: &mut GameState) -> Result<(), &'static str> {
+    //     if let Some(i) = state.inventory.iter().position(|c| c.type_() == self.type_()) {
+    //         match self.location() {
+    //             PH => {
+    //                 if let Some(cur) = state.primary {
+    //                     state.inventory.push(cur);
+    //                 }
+    //                 state.primary = Some(self as &'static dyn Ownable);
+    //                 state.inventory.remove(i);
+    //                 Ok(())
+    //             }
+    //             AS => Err("This item is an accessory")
+    //         }
+    //     } else {
+    //         Err("Not in inventory")
+    //     }
+    // }
+}
+
+/// Marker trait for consumables
+pub trait Consumable: Ownable {
+    fn consume(&'static self, state: &mut crate::GameState);
 }
 
 #[macro_export]
@@ -103,18 +127,6 @@ macro_rules! card {
             fn location(&'static self) -> EquipLocation {EquipLocation::$l}
         }
     };
-    ($c:ident, $t:ident, $f:literal dungeon) => {
-        #[derive(Debug)]
-        pub struct $c;
-        impl Card for $c {
-            fn type_(&'static self) -> CardIdent {
-                CardIdent::$t($t::$c)
-            }
-            fn front(&'static self) -> &'static str {
-                $f
-            }
-        }
-    };
     ($c:ident, $t:ident, $f:literal skill) => {
         #[derive(Debug)]
         pub struct $c;
@@ -152,9 +164,4 @@ macro_rules! ownable {
             fn location(&'static self) -> EquipLocation {EquipLocation::$l}
         }
     };
-}
-
-/// Marker trait for consumables
-pub trait Consumable: Ownable {
-    fn consume(&'static self, state: &mut crate::GameState);
 }
