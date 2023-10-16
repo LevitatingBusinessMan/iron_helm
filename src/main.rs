@@ -4,7 +4,12 @@
 
 #[macro_use]
 pub mod card;
+use std::fmt::Write;
+
 use card::*;
+
+pub mod dice;
+pub mod choice;
 
 #[derive(Debug)]
 pub struct GameState {
@@ -15,6 +20,7 @@ pub struct GameState {
     pub energy: u8,
     pub rations: u8,
     pub wealth: u8,
+    pub blessings: u8,
     pub character: &'static dyn characters::CharacterCard,
     pub head: Option<&'static dyn Ownable>,
     pub body: Option<&'static dyn Ownable>,
@@ -24,13 +30,29 @@ pub struct GameState {
 
 impl GameState {
     pub fn increase_poison(&mut self, n: u8) {
+        println!("You've gained {n} poison tokens!");
         self.poison += n;
     }
+    pub fn decrease_poison(&mut self, n: u8) {
+        if self.poison < n {
+            println!("You've lost {} poison tokens!", self.poison);
+            self.poison = 0
+        } else {
+            println!("You've lost {n} poison tokens!");
+            self.poison -= n;
+        }
+    }
     pub fn increase_energy(&mut self, n: u8) {
+        println!("You've gained {n} energy tokens!");
         self.energy += n;
     }
     pub fn increase_health(&mut self, n: u8) {
+        println!("You've gained {n} health tokens!");
         self.health += n;
+    }
+    pub fn increase_blessings(&mut self, n: u8) {
+        println!("You've gained {n} blessing tokens!");
+        self.blessings += n;
     }
 }
 
@@ -43,6 +65,7 @@ fn main() {
         energy: 0,
         rations: 0,
         wealth: 0,
+        blessings: 0,
         character: &characters::Sortab{},
         head: None,
         primary: None,

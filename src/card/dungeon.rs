@@ -2,7 +2,24 @@ use super::*;
 use crate::card;
 
 card!(Altar, Dungeon, "altar.jpg");
-impl DungeonCard for Altar {}
+impl DungeonCard for Altar {
+    fn resolve(&self, state: &mut crate::GameState, _first_draw: bool) {
+        let choice = crate::choice::select(
+            "Sometimes a sanctuary is found in the least expected place. You drop and pray at the altar for?",
+            &vec!["A blessing", "Healing"]
+        );
+        match choice {
+            "A blessing" => {
+                state.increase_blessings(1);
+            },
+            "Healing" => {
+                use crate::dice::d6;
+                state.decrease_poison(d6()-d6());
+            },
+            _ => unreachable!()
+        }
+    }
+}
 card!(Ambush, Dungeon, "ambush.jpg");
 impl DungeonCard for Ambush {}
 card!(ArrowTrap, Dungeon, "arrow_trap.jpg");
