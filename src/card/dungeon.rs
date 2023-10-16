@@ -4,17 +4,20 @@ use crate::card;
 card!(Altar, Dungeon, "altar.jpg");
 impl DungeonCard for Altar {
     fn resolve(&self, state: &mut crate::GameState, _first_draw: bool) {
+        const BLESS: &'static str = "A blessing - Gain 1 blessing token";
+        const HEAL: &'static str = "Healing - Discard d6-d6 poison tokens";
         let choice = crate::choice::select(
             "Sometimes a sanctuary is found in the least expected place. You drop and pray at the altar for?",
-            &vec!["A blessing", "Healing"]
+            &vec![BLESS, HEAL]
         );
+        println!("{}", choice);
         match choice {
-            "A blessing" => {
+            BLESS => {
                 state.increase_blessings(1);
             },
-            "Healing" => {
+            HEAL => {
                 use crate::dice::d6;
-                state.decrease_poison(d6()-d6());
+                state.decrease_poison(d6().abs_diff(d6()));
             },
             _ => unreachable!()
         }

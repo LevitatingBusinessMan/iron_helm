@@ -4,9 +4,9 @@
 
 #[macro_use]
 pub mod card;
-use std::fmt::Write;
 
 use card::*;
+use crate::card::dungeon::DungeonCard;
 
 pub mod dice;
 pub mod choice;
@@ -76,6 +76,7 @@ fn main() {
     println!("Do I have a wooden staff? {}", state.inventory.first().unwrap().type_() == card::CardIdent::Trappings(card::Trappings::WoodenStaff));
     let card = card::dungeon::draw();
     println!("Received card {:?}", card);
+    let card = &card::dungeon::Altar{};
     card.resolve(&mut state, true);
     println!("New state: {:?}", state);
     let loot = card::loot::draw();
